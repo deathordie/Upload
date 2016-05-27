@@ -1,25 +1,36 @@
 <?php
     if(isset($_POST['Upload'])){
-        $checktype ='';
+        $checktype = false;
          for($i=0; $i<count($_FILES['file']['name']);$i++){
-             
-            If($_FILES['file']['type'][$i] != 'image/jpeg'){
-                $checktype = FALSE;
-                
-                }
-            else{
-                
-                if($checktype == false)
-                    $checktype = FALSE;        
-                else
-                    $checktype = true;
+            If($_FILES['file']['type'][$i] == 'image/jpeg'){
+                $checktype = true;
             }
-        }
-        if($checktype == 0)
+            else{
+                $checktype = false;
+                break;
+            }
+         }
+         if($checktype == true){
+            date_default_timezone_set('asia/bangkok');
+            $str = "Pic".date('d-m-Y H-i-s');
+            mkdir($str);
+            for($i=0; $i<count($_FILES['file']['name']);$i++){
+                move_uploaded_file($_FILES['file']['tmp_name'][$i],$str.'/'.$i.'.jpg');
+                chmod($str, 0775);
+                
+            }
+           
+            //move_uploaded_file($_FILES['file']['tmp_name'][$i],$str.'/'.$_FILES['file']['name'][$i]);
+            //echo "<script lang='javascript'>alert('บันทึกข้อมูลเรียบร้อยแล้ว');</script>";
+         }
+         else
             echo "<script lang='javascript'>alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');</script>";
-        else
-        echo $checktype;
     }
+        //if($checktype == 0)
+          //  echo "<script lang='javascript'>alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');</script>";
+        //else
+        //echo $checktype;
+    
         /*If($_FILES['file']['type'] == 'image/jpeg'){
             date_default_timezone_set('asia/bangkok');
             $str = "Pic".date('d-m-Y H-i-s');
